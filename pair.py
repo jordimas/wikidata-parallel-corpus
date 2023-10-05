@@ -14,7 +14,7 @@ with open("data.1st/en.txt", "r") as f_src, open("data.1st/ca.txt", "r") as f_tg
         components = line.split("\t")
         tgt_id = components[0]
         tgt_str = components[1]
-        tgts[src_id] = tgt_str
+        tgts[tgt_id] = tgt_str
 
     with open("en.txt", "w") as f_src, open("ca.txt", "w") as f_tgt:
         written = 0
