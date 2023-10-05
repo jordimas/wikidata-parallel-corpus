@@ -2,19 +2,19 @@ import sys
 import datetime
 import zlib
 
-with open("data.1st/en.txt", "r") as f_src, open("data.1st/ca.txt", "r") as f_tgt:
+with open("data.1st/en.txt", "r") as f_src, open("data.1st/ca.txt", "r") as f_tgt, open("pair-debug.txt", "w") as f_output_debug:
     srcs = {}
     for line in f_src.readlines():
         components = line.split("\t")
         src_id = components[0]
-        src_str = components[1]
+        src_str = components[1].rstrip()
         srcs[src_id] = src_str
 
     tgts = {}
     for line in f_tgt.readlines():
         components = line.split("\t")
         tgt_id = components[0]
-        tgt_str = components[1]
+        tgt_str = components[1].rstrip()
         tgts[tgt_id] = tgt_str
 
     already_seen = set()
@@ -35,5 +35,9 @@ with open("data.1st/en.txt", "r") as f_src, open("data.1st/ca.txt", "r") as f_tg
             written += 1
             f_src.write(f"{src_str}\n")
             f_tgt.write(f"{tgt_src}\n")
+
+            f_output_debug.write(f"---\n")
+            f_output_debug.write(f"{src_str}\n")
+            f_output_debug.write(f"{tgt_src}\n")
 
         print(f"Total: {total}, written: {written}")
