@@ -27,7 +27,7 @@ with open("data.1st/en.txt", "r") as f_src, open("data.1st/ca.txt", "r") as f_tg
                 continue
 
             total += 1
-            crc = zlib.crc32(bytes(tgt_src, "utf-8"))
+            crc = zlib.crc32(bytes(src_str, "utf-8"))
             if crc in already_seen:
                 continue
 
