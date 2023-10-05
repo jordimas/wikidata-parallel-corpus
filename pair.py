@@ -47,20 +47,22 @@ with open("data.1st/en.txt", "r") as f_src, open("data.1st/ca.txt", "r") as f_tg
         total = 0
         written = 0
         diff = 0
+        duplicated = 0
         for _id, src_str in srcs.items():
             tgt_src = tgts.get(_id)
             if not tgt_src:
                 continue
                 
             if not _is_sentence_len_good(src_str, tgt_str):
-                print(f"{src_src}")
-                print(f"{tgt_src}\n")   
+#                print(f"{src_str}")
+#                print(f"{tgt_str}\n")
                 diff += 1
                 continue                               
 
             total += 1
             crc = zlib.crc32(bytes(src_str, "utf-8"))
             if crc in already_seen:
+                duplicated += 1
                 continue
 
             already_seen.add(crc)
@@ -72,4 +74,4 @@ with open("data.1st/en.txt", "r") as f_src, open("data.1st/ca.txt", "r") as f_tg
             f_output_debug.write(f"{src_str}\n")
             f_output_debug.write(f"{tgt_src}\n")
 
-        print(f"Total: {total}, written: {written}, diff discarted {diff}")
+        print(f"Total: {total}, diff discarted {diff}, duplicated {duplicated}, written: {written}")
