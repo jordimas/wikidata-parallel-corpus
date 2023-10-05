@@ -10,8 +10,8 @@ def _is_sentence_len_good(src, trg):
 
     if lsrc == 0 or ltrg == 0:
         return False
-
-    MIN_CHARS = 50
+        
+    MIN_CHARS = 40
     if max(lsrc, ltrg) > MIN_CHARS:
         size_diff_percentage = 50
         if size_diff_percentage > 0:
