@@ -59,7 +59,7 @@ def main():
 
     print(f"Sorted: {len(files)} files")
 
-    MAX_LINES = 1000000
+    MAX_LINES = 500000
     total_files = 0
     for fullpath, filename in zip(sorted_fullpath, sorted_filename):
         part = 1
