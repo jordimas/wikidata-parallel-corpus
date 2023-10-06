@@ -49,8 +49,8 @@ def extract(directory):
 
             file_h.write(f"{_id}\t{description}\n")
 
-#        if processed > 5000000:
-#            break
+    #        if processed > 5000000:
+    #            break
 
     s = sorted(languages.items(), key=operator.itemgetter(1), reverse=True)
     with open(f"{directory}/languages.txt", "w") as f_output:
