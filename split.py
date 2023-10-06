@@ -63,6 +63,7 @@ def main():
     total_files = 0
     for fullpath, filename in zip(sorted_fullpath, sorted_filename):
         part = 1
+        print(filename)
         with open(fullpath, "r") as fh_input:
             lines = 0
             output_file = getfiname(filename, part, TARGET_DIR)
@@ -70,12 +71,13 @@ def main():
             total_files += 1
             while True:
                 src = fh_input.readline()
+                lines += 1                
                 fh_output.write(src)
 
                 if not src:
                     break
 
-                if lines > MAX_LINES:
+                if lines >= MAX_LINES:
                     lines = 0
                     fh_output.close()
                     part += 1
@@ -83,9 +85,8 @@ def main():
                     output_file = getfiname(filename, part, TARGET_DIR)
                     fh_output = open(output_file, "w")
                     total_files += 1
-                lines += 1
                 
-    print(f"Splitted {total_files} total files from {len(fullpath)} files")
+    print(f"Splitted {total_files} total files from {len(sorted_fullpath)} files")
 
 
 if __name__ == "__main__":
