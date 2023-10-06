@@ -64,7 +64,9 @@ def extract(directory):
 
 def main():
     print("Read data from Wikimedia and extracts the descriptions")
+
     directory = "extracted/"
+    print("Output directory: {directory}")
     ensure_dir(directory)
     extract(directory)
 

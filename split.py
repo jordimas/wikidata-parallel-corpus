@@ -48,7 +48,15 @@ def main():
         cmd = f"sort -V {src} -o {tgt}"
         os.system(cmd)
         
-            
+    for _file in sorted:
+        with open(_file, "r")
+            while True:
+                src = _file.readline()
+                trg = read_target.readline()
+
+                if not src:
+                    break
+                            
         
 if __name__ == "__main__":
     main()
