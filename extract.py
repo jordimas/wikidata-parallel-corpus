@@ -53,7 +53,7 @@ def extract(directory):
             break
 
     s = sorted(languages.items(), key=operator.itemgetter(1), reverse=True)
-    with open("f{directory}/languages.txt", "w") as f_output:
+    with open(f"{directory}/languages.txt", "w") as f_output:
         for language, counter in s:
             pequal = counter * 100 / processed
             f_output.write(f"{language} - {counter} ({pequal:.2f}%)\n")
