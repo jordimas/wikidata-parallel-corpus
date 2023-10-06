@@ -15,7 +15,7 @@ def _is_sentence_len_good(src, trg):
 
     MIN_CHARS = 40
     if max(lsrc, ltrg) > MIN_CHARS:
-        size_diff_percentage = 70
+        size_diff_percentage = 0
         if lsrc < ltrg:
             tmp = lsrc
             lsrc = ltrg
@@ -25,11 +25,10 @@ def _is_sentence_len_good(src, trg):
         diff = (lsrc - ltrg) / lsrc * 100
 
         cnd = diff > size_diff_percentage
-        #
         if cnd:
             return False
 
-        print(f"{diff} - {cnd} - {src} - {trg}")
+        #print(f"{diff} - {cnd} - {src} - {trg}")
 
     return True
 
@@ -42,19 +41,20 @@ with open("data.1st/en.txt", "r") as f_src, open("data.1st/ca.txt", "r") as f_tg
 ) as f_output_debug:
     start_time = datetime.datetime.now()
 
-    srcs = {}
-    for line in f_src.readlines():
-        components = line.split("\t")
-        src_id = components[0]
-        src_str = components[1].rstrip()
-        srcs[src_id] = src_str
-
     tgts = {}
     for line in f_tgt.readlines():
         components = line.split("\t")
         tgt_id = components[0]
         tgt_str = components[1].rstrip()
-        tgts[tgt_id] = tgt_str
+        tgts[tgt_id] = tgt_str    
+
+    srcs = {}
+    for line in f_src.readlines():
+        components = line.split("\t")
+        src_id = components[0]
+        src_str = components[1].rstrip()
+        if src_id in tgts:
+            srcs[src_id] = src_str
 
     already_seen = set()
     with open("en.txt", "w") as f_src, open("ca.txt", "w") as f_tgt:
@@ -67,11 +67,9 @@ with open("data.1st/en.txt", "r") as f_src, open("data.1st/ca.txt", "r") as f_tg
             if not tgt_src:
                 continue
 
-            #            if not _is_sentence_len_good(src_str, tgt_str):
-            #                print(f"{src_str}")
-            #                print(f"{tgt_str}\n")
-            #                diff += 1
-            #                continue
+            if not _is_sentence_len_good(src_str, tgt_str):
+                diff += 1
+                continue
 
             total += 1
             crc = zlib.crc32(bytes(src_str, "utf-8"))
