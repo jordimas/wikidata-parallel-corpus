@@ -84,7 +84,8 @@ def main():
                     fh_output = open(output_file, "w")
                     total_files += 1
                 lines += 1
-    print(f"Created ´{total_files} total files from {len(fullpath)}")
+                
+    print(f"Splitted {total_files} total files from {len(fullpath)} files")
 
 
 if __name__ == "__main__":
