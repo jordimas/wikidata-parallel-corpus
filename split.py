@@ -57,13 +57,17 @@ def main():
         cmd = f"sort -V {src} -o {tgt}"
         os.system(cmd)
 
+    print(f"Sorted: {len(files)} files")
+
     MAX_LINES = 1000000
+    total_files = 0
     for fullpath, filename in zip(sorted_fullpath, sorted_filename):
         part = 1
         with open(fullpath, "r") as fh_input:
             lines = 0
             output_file = getfiname(filename, part, TARGET_DIR)
             fh_output = open(output_file, "w")
+            total_files += 1
             while True:
                 src = fh_input.readline()
                 fh_output.write(src)
@@ -78,8 +82,9 @@ def main():
 
                     output_file = getfiname(filename, part, TARGET_DIR)
                     fh_output = open(output_file, "w")
-
+                    total_files += 1
                 lines += 1
+    print(f"Created ´{total_files} total files from {len(fullpath)}")
 
 
 if __name__ == "__main__":
