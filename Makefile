@@ -1,7 +1,7 @@
 .PHONY: build
 
 build:
-	run-extract.sh
+	./run-extract.sh
 	python split.py
 
 
