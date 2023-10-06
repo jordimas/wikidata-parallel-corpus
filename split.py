@@ -63,7 +63,6 @@ def main():
     total_files = 0
     for fullpath, filename in zip(sorted_fullpath, sorted_filename):
         part = 1
-        print(filename)
         with open(fullpath, "r") as fh_input:
             lines = 0
             output_file = getfiname(filename, part, TARGET_DIR)
