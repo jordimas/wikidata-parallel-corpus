@@ -2,7 +2,9 @@ import sys
 import datetime
 import zlib
 import datetime
+import logging
 
+logging.basicConfig(filename='pair.log', encoding='utf-8', level=logging.DEBUG)
 
 def _is_sentence_len_good(src, trg):
     src = src.strip()
@@ -13,28 +15,27 @@ def _is_sentence_len_good(src, trg):
     if lsrc == 0 or ltrg == 0:
         return False
 
-    MIN_CHARS = 40
-    if max(lsrc, ltrg) > MIN_CHARS:
-        size_diff_percentage = 0
-        if lsrc < ltrg:
-            tmp = lsrc
-            lsrc = ltrg
-            ltrg = tmp
+#    MIN_CHARS = 15
+#    if max(lsrc, ltrg) > MIN_CHARS:
+ 
+    # the lower % better
+    size_diff_percentage = 30
+    if lsrc < ltrg:
+        tmp = lsrc
+        lsrc = ltrg
+        ltrg = tmp
 
-        # 20-10
-        diff = (lsrc - ltrg) / lsrc * 100
+    diff = (lsrc - ltrg) / lsrc * 100
+    cnd = diff > size_diff_percentage
+#       print(f"{diff} - {cnd} - {src} - {trg}")
 
-        cnd = diff > size_diff_percentage
-        if cnd:
-            return False
-
-        #print(f"{diff} - {cnd} - {src} - {trg}")
-
-    return True
+    logging.debug(f"{diff} - {cnd} - {lsrc} - {ltrg} - {src} - {trg}")
+    return cnd
 
 
-# _is_sentence_len_good(" Estonian teacher and local historian, worked in Kihnu", " Estonian teacher Estonian teacher  Estonian teacher")
-# exit(0)
+#_is_sentence_len_good("conflicte bèl·lic global que tingué lloc entre els anys 1939 i 1945", "global war, 1939 global war")
+#_is_sentence_len_good("spread made from fruit", "gel")
+#exit(0)
 
 with open("data.1st/en.txt", "r") as f_src, open("data.1st/ca.txt", "r") as f_tgt, open(
     "pair-debug.txt", "w"
@@ -42,14 +43,14 @@ with open("data.1st/en.txt", "r") as f_src, open("data.1st/ca.txt", "r") as f_tg
     start_time = datetime.datetime.now()
 
     tgts = {}
-    for line in f_tgt.readlines():
+    for line in f_tgt.readlines()[0:100000]:
         components = line.split("\t")
         tgt_id = components[0]
         tgt_str = components[1].rstrip()
         tgts[tgt_id] = tgt_str    
 
     srcs = {}
-    for line in f_src.readlines():
+    for line in f_src.readlines()[0:100000]:
         components = line.split("\t")
         src_id = components[0]
         src_str = components[1].rstrip()
