@@ -37,13 +37,18 @@ def main():
     TARGET_DIR = "data/"
     ensure_dir(TARGET_DIR)
 
+
     # Sort files
+    sorted_files = []
     files = FindFiles().find(SOURCE_DIR, "*.txt")
     for src in files:
         filename = os.path.basename(src)
         tgt = os.path.join(TARGET_DIR, filename.replace(".txt", ".sorted"))
+        sorted_files.append(sorted_files)
         cmd = f"sort -V {src} -o {tgt}"
         os.system(cmd)
+        
+            
         
 if __name__ == "__main__":
     main()
