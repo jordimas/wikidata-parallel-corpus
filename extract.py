@@ -49,11 +49,11 @@ def extract(directory):
 
             file_h.write(f"{_id}\t{description}\n")
 
-        if processed > 1000000:
+        if processed > 5000000:
             break
 
     s = sorted(languages.items(), key=operator.itemgetter(1), reverse=True)
-    with open("{directory}/languages.txt", "w") as f_output:
+    with open("f{directory}/languages.txt", "w") as f_output:
         for language, counter in s:
             pequal = counter * 100 / processed
             f_output.write(f"{language} - {counter} ({pequal:.2f}%)\n")
