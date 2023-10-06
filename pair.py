@@ -4,7 +4,8 @@ import zlib
 import datetime
 import logging
 
-logging.basicConfig(filename='pair.log', encoding='utf-8', level=logging.DEBUG)
+logging.basicConfig(filename="pair.log", encoding="utf-8", level=logging.DEBUG)
+
 
 def _is_sentence_len_good(src, trg):
     src = src.strip()
@@ -15,9 +16,9 @@ def _is_sentence_len_good(src, trg):
     if lsrc == 0 or ltrg == 0:
         return False
 
-#    MIN_CHARS = 15
-#    if max(lsrc, ltrg) > MIN_CHARS:
- 
+    #    MIN_CHARS = 15
+    #    if max(lsrc, ltrg) > MIN_CHARS:
+
     # the lower % better
     size_diff_percentage = 30
     if lsrc < ltrg:
@@ -27,15 +28,15 @@ def _is_sentence_len_good(src, trg):
 
     diff = (lsrc - ltrg) / lsrc * 100
     cnd = diff > size_diff_percentage
-#       print(f"{diff} - {cnd} - {src} - {trg}")
+    #       print(f"{diff} - {cnd} - {src} - {trg}")
 
     logging.debug(f"{diff} - {cnd} - {lsrc} - {ltrg} - {src} - {trg}")
     return cnd
 
 
-#_is_sentence_len_good("conflicte bèl·lic global que tingué lloc entre els anys 1939 i 1945", "global war, 1939 global war")
-#_is_sentence_len_good("spread made from fruit", "gel")
-#exit(0)
+# _is_sentence_len_good("conflicte bèl·lic global que tingué lloc entre els anys 1939 i 1945", "global war, 1939 global war")
+# _is_sentence_len_good("spread made from fruit", "gel")
+# exit(0)
 
 with open("data.1st/en.txt", "r") as f_src, open("data.1st/ca.txt", "r") as f_tgt, open(
     "pair-debug.txt", "w"
@@ -47,7 +48,7 @@ with open("data.1st/en.txt", "r") as f_src, open("data.1st/ca.txt", "r") as f_tg
         components = line.split("\t")
         tgt_id = components[0]
         tgt_str = components[1].rstrip()
-        tgts[tgt_id] = tgt_str    
+        tgts[tgt_id] = tgt_str
 
     srcs = {}
     for line in f_src.readlines()[0:100000]:

@@ -16,21 +16,13 @@ def inc_string_counter_for_lang(languages, language):
     languages[language] = counter
 
 
-def create_file(directory, language, part, files):
-    file_h = open(f"{directory}/{language}-{part}.raw", "w")
-    files[language] = file_h
-    return file_h
-
-
 def extract(directory):
     start_time = datetime.datetime.now()
 
     items = ijson.items(sys.stdin, "item", use_float=True)
     languages = {}
     files = {}
-    parts = {}
     processed = 0
-    MAX_LINES = 500000
     for item in items:
         if processed % 1000000 == 0:
             print(f"item processed: {processed}")
@@ -50,38 +42,18 @@ def extract(directory):
             inc_string_counter_for_lang(languages, language)
 
             file_h = files.get(language)
-            part, lines = parts.get(language, (1, 0))
-            lines += 1
 
             if not file_h:
-                file_h = create_file(directory, language, part, files)
-
-            elif lines > MAX_LINES:
-                lines = 0
-                part += 1
-
-                file_h.close()
-                file_h = create_file(directory, language, part, files)
+                file_h = open(f"{directory}/{language}.txt", "w")
+                files[language] = file_h
 
             file_h.write(f"{_id}\t{description}\n")
-            parts[language] = (part, lines)
 
-    #        if processed > 1000:
-    #            break
-
-    for language in parts:
-        last_part = parts[language]
-        for part in range(0, len(last_part)):
-            src = f"{directory}/{language}-{part}.raw"
-            tgt = f"{directory}/{language}-{part}.txt"
-            if not os.path.exists(src):
-                continue
-
-            cmd = f"sort -V {src} -o {tgt}"
-            os.system(cmd)
+        if processed > 1000000:
+            break
 
     s = sorted(languages.items(), key=operator.itemgetter(1), reverse=True)
-    with open("languages.txt", "w") as f_output:
+    with open("{directory}/languages.txt", "w") as f_output:
         for language, counter in s:
             pequal = counter * 100 / processed
             f_output.write(f"{language} - {counter} ({pequal:.2f}%)\n")
@@ -91,7 +63,8 @@ def extract(directory):
 
 
 def main():
-    directory = "data/"
+    print("Read data from Wikimedia and extracts the descriptions")
+    directory = "extracted/"
     ensure_dir(directory)
     extract(directory)
 
