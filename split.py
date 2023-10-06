@@ -19,6 +19,11 @@ class FindFiles(object):
         filelist.sort()
         return filelist
 
+def file_len(fname):
+    with open(fname) as f:
+        for i, l in enumerate(f):
+            pass
+    return i + 1
 
 def ensure_dir(directory):
     isExist = os.path.exists(directory)
@@ -32,15 +37,13 @@ def main():
     TARGET_DIR = "data/"
     ensure_dir(TARGET_DIR)
 
+    # Sort files
     files = FindFiles().find(SOURCE_DIR, "*.txt")
     for src in files:
         filename = os.path.basename(src)
-        tgt = f"{TARGET_DIR}/{filename}"
-        print(src)
-        print(tgt)
-        cmd = "sort -V {src} -o {tgt}"
+        tgt = os.path.join(TARGET_DIR, filename.replace(".txt", ".sorted"))
+        cmd = f"sort -V {src} -o {tgt}"
         os.system(cmd)
-
-
+        
 if __name__ == "__main__":
     main()
