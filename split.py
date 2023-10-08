@@ -70,7 +70,7 @@ def main():
             total_files += 1
             while True:
                 src = fh_input.readline()
-                lines += 1                
+                lines += 1
                 fh_output.write(src)
 
                 if not src:
@@ -84,7 +84,7 @@ def main():
                     output_file = getfiname(filename, part, TARGET_DIR)
                     fh_output = open(output_file, "w")
                     total_files += 1
-                
+
     print(f"Splitted {total_files} total files from {len(sorted_fullpath)} files")
 
 

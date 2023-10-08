@@ -3,6 +3,7 @@ import datetime
 import zlib
 import datetime
 import logging
+import os
 
 logging.basicConfig(filename="pair.log", encoding="utf-8", level=logging.DEBUG)
 
@@ -38,35 +39,56 @@ def _is_sentence_len_good(src, trg):
 # _is_sentence_len_good("spread made from fruit", "gel")
 # exit(0)
 
-with open("data.1st/en.txt", "r") as f_src, open("data.1st/ca.txt", "r") as f_tgt, open(
-    "pair-debug.txt", "w"
-) as f_output_debug:
+MIN_WORDS = 5
+
+
+def _min_len(src, trg):
+    words_src = src.split()
+    words_trg = trg.split()
+    return len(words_src) > MIN_WORDS and len(words_trg) > words_trg
+
+
+def _load_string_for_language(language):
+    part = 1
+    strings = {}
+    while True:
+        filename = f"data/{language}-{part}.txt"
+        if not os.path.exists(filename):
+            break
+
+        with open(filename) as f_tgt:
+            strings = {}
+            for line in f_tgt.readlines()[0:100000]:
+                components = line.split("\t")
+                tgt_id = components[0]
+                tgt_str = components[1].rstrip()
+                strings[tgt_id] = tgt_str
+
+            print(f"Read {filename} with {len(strings)} lines")
+            part += 1
+
+    return strings
+
+
+with open("pair-debug.txt", "w") as f_output_debug:
     start_time = datetime.datetime.now()
 
-    tgts = {}
-    for line in f_tgt.readlines()[0:100000]:
-        components = line.split("\t")
-        tgt_id = components[0]
-        tgt_str = components[1].rstrip()
-        tgts[tgt_id] = tgt_str
-
-    srcs = {}
-    for line in f_src.readlines()[0:100000]:
-        components = line.split("\t")
-        src_id = components[0]
-        src_str = components[1].rstrip()
-        if src_id in tgts:
-            srcs[src_id] = src_str
-
+    srcs = _load_string_for_language("en")
+    tgts = _load_string_for_language("ca")
     already_seen = set()
     with open("en.txt", "w") as f_src, open("ca.txt", "w") as f_tgt:
         total = 0
         written = 0
         diff = 0
         duplicated = 0
+        too_small = 0
         for _id, src_str in srcs.items():
             tgt_src = tgts.get(_id)
             if not tgt_src:
+                continue
+
+            if not _min_len(src_str, tgt_str):
+                too_small += 1
                 continue
 
             if not _is_sentence_len_good(src_str, tgt_str):
@@ -89,6 +111,6 @@ with open("data.1st/en.txt", "r") as f_src, open("data.1st/ca.txt", "r") as f_tg
             f_output_debug.write(f"{tgt_src}\n")
 
         print(
-            f"Total: {total}, diff discarted {diff}, duplicated {duplicated}, written: {written}"
+            f"Total: {total}, too small {too_small}, diff discarted {diff}, duplicated {duplicated}, written: {written}"
         )
         print("Time used: {0}".format(datetime.datetime.now() - start_time))
